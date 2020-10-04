@@ -1,0 +1,27 @@
+Package: PhySigs
+Title: Phylogenetic Inference of Mutational Signature Dynamics
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Sarah", "Christensen", email = "sac22@illinois.edu",
+         role = c("aut", "cre")),
+   person("Mohammed", "El-Kebir", email = "melkebir@illinois.ed",
+         role = c("aut")))
+Description: Distinct mutational processes shape the genomes of clones comprising a tumor. These processes 
+    result in distinct mutational patterns, summarized by a small number of mutational signatures. Our R package, 
+    PhySigs, solves the Tree-constrained Exposure problem, which outputs clone-specific exposures to mutational 
+    signatures while accounting for evolutionary context. Our package also includes model selection to identify 
+    the number of exposure shifts along branches of the tumor phylogeny that best explain the data.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    testthat (>= 2.3),
+    Rgraphviz (>= 3.9),
+    RColorBrewer (>= 1.1)
+Imports: 
+    deconstructSigs (>= 1.8),
+    graph (>= 1.63)
+Depends: 
+    R (>= 2.10)
