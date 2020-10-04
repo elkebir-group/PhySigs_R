@@ -23,6 +23,5 @@ on "default", "genome", and "exome". Please see deconstructSigs documentation
 for more information on the normalization procedure.
 }
 \examples{
-tri.counts.genome <- deconstructSigs::tri.counts.genome
 normalizeFeatureMatrix(P, "genome")
 }

@@ -42,3 +42,22 @@
 #' @format A list of data frames, each with 2 rows (active signatures) and x variables (number of clone clusters):
 #' \describe{E.g., B;C: Cluster of comprised of nodes B and C}
 "E_list"
+
+#' The counts of every trinuclotide frequency in a genome
+#'
+#' A datset containing the number of times each trinucleotide (ex: ACA) is found in the hg19 genome.
+#'
+#' @format A data frame of 32 rows and 1 column that contains the counts
+#'
+#' @source \url{https://rdrr.io/cran/deconstructSigs/man/tri.counts.genome.html}
+"tri.counts.genome"
+
+#' The counts of every trinuclotide frequency in an exome
+#'
+#' A datset containing the number of times each trinucleotide (ex: ACA) is found in the exome region captured
+#' by sequencing.
+#'
+#' @format A data frame of 32 rows and 1 column that contains the counts
+#'
+#' @source \url{https://rdrr.io/cran/deconstructSigs/man/tri.counts.exome.html}
+"tri.counts.exome"

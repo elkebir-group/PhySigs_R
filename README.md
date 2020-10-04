@@ -4,7 +4,7 @@ This software corresponds to the paper "PhySigs: Phylogenetic Inference of Mutat
 
 The input to PhySigs is a phylogeny with nodes representing clones in a patient tumor, a signature matrix containing the set of mutational signatures to use in the analysis, and a feature matrix for the set of mutations introduced in each clone. In particular, the mutational categories in the feature matrix should correspond to the mutational categories used in the signature matrix.  Currently, PhySigs supports the standard 96 mutational categories for SNVs for [COSMIC V2](https://cancer.sanger.ac.uk/cosmic/signatures_v2) signatures.   
 
-![Overview of PhySigs problem](overview.png)
+![Overview of PhySigs problem](inst/images/overview.png)
 
 PhySigs automatically computes the count matrix, as it is simply a diagonal matrix containing the sum of columns in the feature matrix. PhySigs then solves the Tree-constrained Exposure (TE) problem for all possible clusterings of the clones that correspond to a partition of the phylogeny. The output of the TE problem is a relative exposure matrix composed of groups of identical columns corresponding to clusters of clones with identical exposures (denoted by blue and yellow). Edges between these clusters in the phylogeny are interpreted to be where exposure shifts occurred (denoted by a lightning bolt). PhySigs uses the Bayesian Information Criterion to select the number of clusters that best explain the data (2 clusters depicted).
 
@@ -32,8 +32,8 @@ PhySigs is an R package. The implementation was developed and tested in R Versio
 | `R`     | source code for PhySigs                                      |
 | `data`    | example internal data                          |
 | `inst` | example raw external data |
-| `tests` | testing code              |
-| `man` | package documentation |
+| `man`   | package documentation     |
+| `tests` | testing code |
 
 <a name="dep"></a>
 
@@ -64,12 +64,17 @@ PhySigs is an R package that can be conveniently installed from GitHub.
 ```R
 install.packages("devtools")
 devtools::install_github("elkebir-group/PhySigs_R")
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("graph","BSgenome","GenomeInfoDb","BSgenome.Hsapiens.UCSC.hg19"))
 ```
 
 To use PhySigs, you can then import it as a library in your code. 
 
 ```R
-library(PhySigs_R)
+library(PhySigs)
 ```
 
 <a name="io"></a>
@@ -192,4 +197,4 @@ plotTree(tumorID, title, T_tree, E_list[[k]], tree_idx=1)
 Running all of these steps together should result in the following plot.
 
 
-![Example Tree Exposure Plot](example_results.png)
+![Example Tree Exposure Plot](inst/images/example_results.png)

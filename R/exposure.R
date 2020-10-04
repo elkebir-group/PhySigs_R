@@ -1,7 +1,3 @@
-# We get normalization from deconstructSigs
-tri.counts.genome <- deconstructSigs::tri.counts.genome
-tri.counts.exome <- deconstructSigs::tri.counts.exome
-
 #' Normalize mutational signature feature matrix
 #'
 #' This function takes as input feature matrix where each row is a clone and each
@@ -18,7 +14,6 @@ tri.counts.exome <- deconstructSigs::tri.counts.exome
 #' @export
 #'
 #' @examples
-#' tri.counts.genome <- deconstructSigs::tri.counts.genome
 #' normalizeFeatureMatrix(P, "genome")
 normalizeFeatureMatrix <- function(feat_mat, norm_method) {
 
