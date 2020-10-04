@@ -17,7 +17,7 @@
 plotTree <- function(patient, title, tree, exp_mat, tree_idx = 0) {
 
   if (!requireNamespace("Rgraphviz", quietly = TRUE)) {
-    stop("Package \"Rgraphviz\" needed for this function to work. Please install it.",
+    stop("Package \"Rgraphviz\" needed for this function to work. Please install it from Bioconductor.",
          call. = FALSE)
   }
 

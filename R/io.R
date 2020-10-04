@@ -3,7 +3,7 @@
 #' Given a sample ID (e.g., patient tumor ID), tree ID for this sample (e.g., 2), list of exposure
 #' data frames for all numbers of exposure shifts, and the number of exposure shifts of interest,
 #' this function returned a dataframe where each row corresponds to a node in the sample tree. The
-#' columns are as follows: Sample ID, Tree ID, Node ID, Signature 1 exposure ... Signature X exposure.
+#' columns are as follows: Sample ID, Tree ID, k, Node ID, Signature 1 exposure ... Signature X exposure.
 #' This formatting is used in the input to the corresponding visualization tool for PhySigs.
 #'
 #' @param sample character
@@ -39,7 +39,7 @@ outputExposures <- function(sample, tree_idx, exp_list, k){
   rownames(out_df) <- c()
 
   # Output data frame with the following columns
-  # Sample; Tree ID (1-based index); Node (Clone; 1-based index); Signature 1 exposure ... Signature X exposure
+  # Sample; Tree ID (1-based index); k, Node (Clone; 1-based index); Signature 1 exposure ... Signature X exposure
   return(out_df)
 }
 

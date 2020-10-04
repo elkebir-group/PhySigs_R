@@ -1,3 +1,5 @@
+
+
 # PhySigs R: R Package for Phylogenetic Inference of Mutational Signature Dynamics
 
 This software corresponds to the paper "PhySigs: Phylogenetic Inference of Mutational Signature Dynamics" presented at the 2020 Pacific Symposium on Biocomputing and linked [here](https://psb.stanford.edu/psb-online/proceedings/psb20/Christensen.pdf). Please cite this paper when using the PhySigs software. The original R repository that is not a package can be found [here](https://github.com/elkebir-group/PhySigs).
@@ -20,6 +22,8 @@ PhySigs automatically computes the count matrix, as it is simply a diagonal matr
      * [getError](#error)
      * [getBIC](#bic)
      * [plotTree](#plot)
+     * [outputTrees](#outputTrees)
+     * [outputExposures](#outputExposures)
 
 <a name="start"></a>
 
@@ -53,7 +57,7 @@ PhySigs has the following suggested dependencies, which may be used to visualize
 
 ## Usage instructions
 
-Here we walk through the pipeline of how to use PhySigs. The code provided in this tutorial can be found at ./results/example.R. 
+Here we walk through the pipeline of how to use PhySigs. 
 
 <a name="install"></a>
 
@@ -64,14 +68,25 @@ PhySigs is an R package that can be conveniently installed from GitHub.
 ```R
 install.packages("devtools")
 devtools::install_github("elkebir-group/PhySigs_R")
+```
 
+If you get an install error stating that certain packages are not available, you need to download them from Bioconductor. Here is an example of how to do that. 
+
+```R
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install(c("graph","BSgenome","GenomeInfoDb","BSgenome.Hsapiens.UCSC.hg19"))
 ```
 
-To use PhySigs, you can then import it as a library in your code. 
+If you would like to enable plotting functions, note that Rgraphviz must also be installed from Bioconductor. The other suggested visualization library, RColorBrewer, is available on CRAN.  
+
+```R
+BiocManager::install("Rgraphviz")
+install.packages("RColorBrewer")
+```
+
+Finally, load the PhySigs library using the following command. 
 
 ```R
 library(PhySigs)
@@ -94,7 +109,7 @@ An example of how to construct the phylogeny from a csv file with rows containin
 
 ```R
 # Input CSV file
-tree_file <- system.file("extdata", "tree.csv", package = "readr", mustWork = TRUE)
+tree_file <- system.file("extdata", "tree.csv", package = "PhySigs", mustWork = TRUE)
 tree_matrix <- read.csv(file=tree_file, header=TRUE, sep=",")
 
 # V1/V2 contains clone label for first/second endpoint of edge
@@ -117,12 +132,12 @@ An example of how to construct the feature matrix from a CSV file of SNVs.
 
 ```R
 # Input CSV file
-snv_file <- system.file("extdata", "snv.csv", package = "readr", mustWork = TRUE)
-input_mat <- as.data.frame(read.csv(file="./data/example/snv.csv", 
+snv_file <- system.file("extdata", "snv.csv", package = "PhySigs", mustWork = TRUE)
+input_mat <- as.data.frame(read.csv(file=snv_file, 
              colClasses = c("character", "character", "numeric", "character", "character")))
 
 # Use deconstructSigs to convert SNVs to 96 Features
-P <- mut.to.sigs.input(mut.ref = input_mat, 
+P <- deconstructSigs::mut.to.sigs.input(mut.ref = input_mat, 
                     sample.id = "Sample", 
                     chr = "chr", 
                     pos = "pos", 
@@ -165,7 +180,8 @@ We include E_list as sample data in the R package.
 Given a normalized feature matrix, estimated exposures, and signature matrix, this function returns the Frobineous norm between the reconstructed feature matrix and the normalized feature matrix.
 
 ```R
-# Get error for exposure matrix from best set of k clusters.
+# Get error for exposure matrix from best set of k exposure shifts.
+# Note that k exposure shifts corresponds to k+1 clusters.
 k <- 1
 error <- getError(P_Norm, E_list[[k]], S)
 ```
@@ -177,7 +193,8 @@ error <- getError(P_Norm, E_list[[k]], S)
 Given a normalized feature matrix, estimated exposures, and signature matrix, this function returns the Bayesian information criterion based on the error between the reconstructed feature matrix and the normalized feature matrix.
 
 ```R
-# Get BIC for exposure matrix from best set of k clusters. 
+# Get BIC for exposure matrix from best set of k exposure shifts.
+# Note that k exposure shifts corresponds to k+1 clusters.
 bic <- getBIC(P_Norm, E_list[[k]], S)
 ```
 
@@ -198,3 +215,31 @@ Running all of these steps together should result in the following plot.
 
 
 ![Example Tree Exposure Plot](inst/images/example_results.png)
+
+<a name="outputTrees"></a>
+
+### outputTrees
+
+Given the tumorID (useful when analyzing more than 1 tumor), tree index (useful when tumor has more than 1 possible tree), and tumor phylogeny, the function outputs a formatted data frame. The data frame contains a single row with the following columns: tumorID, tree index, number of nodes, nodes, and edges.
+
+This is a standardized output that can be used in our visualization tool [here](https://physigs-tree-browser.herokuapp.com/data). 
+
+```R
+# Get tree output formatted for visualization.
+tumorID <- "Tumor1"
+tree_idx <- 1
+outputTrees(tumorID, tree_idx, T_tree)
+```
+
+<a name="outputExposures"></a>
+
+### outputExposures
+
+Given the tumorID (useful when analyzing more than 1 tumor), tree index (useful when tumor has more than 1 possible tree), list of exposure matrices, and the number of exposure shifts k, the function outputs a formatted data frame. The data frame contains a row for each node in the sample tree, and the columns are as follows: tumorID, tree index, k, NodeID, Signature 1 exposure, ..., Signature X exposure.
+
+This is a standardized output that can be used in our visualization tool [here](https://physigs-tree-browser.herokuapp.com/data). 
+
+```R
+# Get exposure output formatted for visualization
+outputExposures(tumorID, tree_idx, E_list, 1)
+```
